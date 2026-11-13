@@ -369,18 +369,69 @@
                 }
             }
         }
-    </script>
-    <script>
+
         (function () {
             const layerA = document.getElementById('ambientLayerA');
             const layerB = document.getElementById('ambientLayerB');
+            const heroTitle = document.getElementById('heroTitle');
+            const heroSub = document.getElementById('heroSub');
+            const lockBadge = document.getElementById('lockBadge');
+            const track = document.querySelector('.conveyor-track');
             const cards = document.querySelectorAll('.photo-module');
+
             let currentSrc = '';
             let useLayerA = true;
+            let isLocked = false;
+
+            function displayCardOnStage(card) {
+                const img = card.querySelector('img');
+                if (!img || img.src === currentSrc) return;
+
+                currentSrc = img.src;
+                const incoming = useLayerA ? layerA : layerB;
+                const outgoing = useLayerA ? layerB : layerA;
+
+                incoming.style.backgroundImage = `url("${currentSrc}")`;
+                incoming.classList.add('active');
+                outgoing.classList.remove('active');
+                useLayerA = !useLayerA;
+
+                const titleEl = card.querySelector('.meta-title');
+                const coordEl = card.querySelector('.meta-coord');
+                if (titleEl && heroTitle) heroTitle.textContent = titleEl.textContent;
+                if (coordEl && heroSub) heroSub.textContent = coordEl.textContent;
+            }
+
+            // Click any card to lock/unlock it on the main screen
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const alreadyLocked = card.classList.contains('is-locked');
+                    cards.forEach(c => c.classList.remove('is-locked'));
+
+                    if (alreadyLocked) {
+                        window.unlockGallery();
+                    } else {
+                        isLocked = true;
+                        card.classList.add('is-locked');
+                        if (track) track.style.animationPlayState = 'paused';
+                        if (lockBadge) lockBadge.classList.add('visible');
+                        displayCardOnStage(card);
+                    }
+                });
+            });
+
+            window.unlockGallery = function () {
+                isLocked = false;
+                cards.forEach(c => c.classList.remove('is-locked'));
+                if (track) track.style.animationPlayState = 'running';
+                if (lockBadge) lockBadge.classList.remove('visible');
+            };
 
             function syncAmbientBackground() {
+                if (isLocked) return;
+
                 const screenCenter = window.innerWidth / 2;
-                let closestImg = null;
+                let closestCard = null;
                 let minDistance = Infinity;
 
                 cards.forEach(card => {
@@ -390,23 +441,15 @@
 
                     if (distance < minDistance) {
                         minDistance = distance;
-                        closestImg = card.querySelector('img');
+                        closestCard = card;
                     }
                 });
 
-                if (closestImg && closestImg.src !== currentSrc) {
-                    currentSrc = closestImg.src;
-                    const incoming = useLayerA ? layerA : layerB;
-                    const outgoing = useLayerA ? layerB : layerA;
-
-                    incoming.style.backgroundImage = `url("${currentSrc}")`;
-                    incoming.classList.add('active');
-                    outgoing.classList.remove('active');
-                    useLayerA = !useLayerA;
+                if (closestCard) {
+                    displayCardOnStage(closestCard);
                 }
             }
 
-            // Initialize first image immediately and sync as cards roll
             syncAmbientBackground();
             setInterval(syncAmbientBackground, 400);
         })();
