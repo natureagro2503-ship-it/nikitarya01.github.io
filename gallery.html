@@ -27,6 +27,33 @@
             display: flex;
             flex-direction: column;
         }
+/* 🌌 NEW: Ambient Dynamic Blurred Backdrop */
+        .ambient-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .ambient-layer {
+            position: absolute;
+            inset: -40px;
+            background-size: cover;
+            background-position: center;
+            filter: blur(45px) brightness(0.45) saturate(1.4);
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+            transform: scale(1.1);
+        }
+        .ambient-layer.active {
+            opacity: 1;
+        }
+        .ambient-backdrop::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(3, 7, 13, 0.25) 0%, rgba(3, 7, 13, 0.85) 100%);
+        }
 
         .top-bar {
             background: rgba(4, 9, 18, 0.95);
@@ -49,14 +76,16 @@
         }
 
         /* 🎞️ Kinetic Conveyor Stage */
-        .stage-view {
+                .stage-view {
             flex: 1;
             position: relative;
             width: 100%;
             overflow: hidden;
             display: flex;
             align-items: center;
+            z-index: 2;
         }
+
         
         /* The container holding the two identical blocks side-by-side */
         .conveyor-track {
@@ -174,8 +203,14 @@
     </style>
 </head>
 <body>
+<!-- 🌌 NEW: AMBIENT BLURRED BACKGROUND LAYERS -->
+    
+        <div class="ambient-backdrop" aria-hidden="true">
+        <div id="ambientLayerA" class="ambient-layer active"></div>
+        <div id="ambientLayerB" class="ambient-layer"></div>
+    </div>
 
-    <div class="top-bar">
+        <div class="top-bar">
         <div>
             <h2>NIKITARYA</h2>
             <div class="sys-mode">Kinetic Matrix // Motion</div>
@@ -297,6 +332,47 @@
                 }
             }
         }
+    </script>
+    <script>
+        (function () {
+            const layerA = document.getElementById('ambientLayerA');
+            const layerB = document.getElementById('ambientLayerB');
+            const cards = document.querySelectorAll('.photo-module');
+            let currentSrc = '';
+            let useLayerA = true;
+
+            function syncAmbientBackground() {
+                const screenCenter = window.innerWidth / 2;
+                let closestImg = null;
+                let minDistance = Infinity;
+
+                cards.forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    const cardCenter = rect.left + rect.width / 2;
+                    const distance = Math.abs(screenCenter - cardCenter);
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestImg = card.querySelector('img');
+                    }
+                });
+
+                if (closestImg && closestImg.src !== currentSrc) {
+                    currentSrc = closestImg.src;
+                    const incoming = useLayerA ? layerA : layerB;
+                    const outgoing = useLayerA ? layerB : layerA;
+
+                    incoming.style.backgroundImage = `url("${currentSrc}")`;
+                    incoming.classList.add('active');
+                    outgoing.classList.remove('active');
+                    useLayerA = !useLayerA;
+                }
+            }
+
+            // Initialize first image immediately and sync as cards roll
+            syncAmbientBackground();
+            setInterval(syncAmbientBackground, 400);
+        })();
     </script>
 </body>
 </html>
