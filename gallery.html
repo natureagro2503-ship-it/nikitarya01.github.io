@@ -35,15 +35,15 @@
             overflow: hidden;
             pointer-events: none;
         }
-        .ambient-layer {
+                .ambient-layer {
             position: absolute;
-            inset: -40px;
+            inset: 0;
             background-size: cover;
             background-position: center;
-            filter: blur(45px) brightness(0.45) saturate(1.4);
+            background-repeat: no-repeat;
+            filter: brightness(0.45) contrast(1.05);
             opacity: 0;
             transition: opacity 1.2s ease-in-out;
-            transform: scale(1.1);
         }
         .ambient-layer.active {
             opacity: 1;
@@ -52,7 +52,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at center, rgba(3, 7, 13, 0.25) 0%, rgba(3, 7, 13, 0.85) 100%);
+            background: radial-gradient(circle at center, rgba(3, 7, 13, 0.2) 0%, rgba(3, 7, 13, 0.75) 100%);
         }
 
         .top-bar {
