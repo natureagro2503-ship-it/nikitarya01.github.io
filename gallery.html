@@ -35,19 +35,22 @@
             overflow: hidden;
             pointer-events: none;
         }
-                .ambient-layer {
+                        .ambient-layer {
             position: absolute;
             inset: 0;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            filter: brightness(0.45) contrast(1.05);
+            filter: brightness(0.6) contrast(1.05);
             opacity: 0;
-            transition: opacity 1.2s ease-in-out;
+            transform: scale(1.08);
+            transition: opacity 1.2s ease-in-out, transform 6s ease-out;
         }
         .ambient-layer.active {
             opacity: 1;
+            transform: scale(1);
         }
+
         .ambient-backdrop::after {
             content: "";
             position: absolute;
