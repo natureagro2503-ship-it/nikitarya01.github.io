@@ -41,7 +41,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            filter: brightness(0.6) contrast(1.05);
+            filter: brightness(0.75) contrast(1.05);
             opacity: 0;
             transform: scale(1.08);
             transition: opacity 1.2s ease-in-out, transform 6s ease-out;
@@ -79,15 +79,17 @@
         }
 
         /* 🎞️ Kinetic Conveyor Stage */
-                .stage-view {
+                       .stage-view {
             flex: 1;
             position: relative;
             width: 100%;
             overflow: hidden;
             display: flex;
-            align-items: center;
+            align-items: flex-end; /* Shifts the rotating gallery to the bottom */
+            padding-bottom: 20px;  /* Adds clean breathing room above the control dock */
             z-index: 2;
         }
+
 
         
         /* The container holding the two identical blocks side-by-side */
@@ -146,9 +148,9 @@
             }
             .photo-module {
                 width: 440px;
-                height: 66vh;
-                max-height: 640px;
-                padding: 16px;
+                height: 42vh;      /* Keeps cards compact at the bottom so the background stands out */
+                max-height: 420px;
+                padding: 14px;
             }
             .photo-meta {
                 font-size: 0.85rem;
