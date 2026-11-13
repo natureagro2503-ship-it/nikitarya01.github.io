@@ -35,13 +35,13 @@
             overflow: hidden;
             pointer-events: none;
         }
-                        .ambient-layer {
+         .ambient-layer {
             position: absolute;
             inset: 0;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            filter: brightness(0.95) contrast(1.05);
+            filter: brightness(0.75) contrast(1.05); /* Brightened so background shines clearly */
             opacity: 0;
             transform: scale(1.08);
             transition: opacity 1.2s ease-in-out, transform 6s ease-out;
@@ -79,15 +79,42 @@
         }
 
         /* 🎞️ Kinetic Conveyor Stage */
-                       .stage-view {
+        .stage-view {
             flex: 1;
             position: relative;
             width: 100%;
             overflow: hidden;
             display: flex;
-            align-items: flex-end; /* Shifts the rotating gallery to the bottom */
-            padding-bottom: 20px;  /* Adds clean breathing room above the control dock */
+            align-items: flex-end; /* Keeps rotating cards anchored at the bottom */
+            padding-bottom: 20px;
             z-index: 2;
+        }
+/* ✨ NEW: Dynamic Upper Hero Caption */
+         .hero-caption {
+            position: fixed;
+            top: 95px;
+            left: 35px;
+            z-index: 5;
+            pointer-events: none;
+            background: rgba(4, 9, 18, 0.55);
+            backdrop-filter: blur(6px);
+            border-left: 3px solid var(--accent-cyan);
+            padding: 12px 20px;
+            transition: opacity 0.4s ease;
+        }
+        .hero-caption-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+        }
+        .hero-caption-sub {
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            letter-spacing: 2px;
+            margin-top: 4px;
         }
 
 
@@ -147,7 +174,7 @@
                 padding: 0 17.5px;
             }
             .photo-module {
-                width: 440px;
+                width: 340px;
                 height: 42vh;      /* Keeps cards compact at the bottom so the background stands out */
                 max-height: 420px;
                 padding: 14px;
@@ -226,6 +253,11 @@
             <span id="audioHudStatus" style="font-size: 0.75rem; letter-spacing: 1px;">SYSTEM AUDIO ACTIVE</span>
             <audio id="galleryAudio" src="music.mp3" loop autoplay></audio>
         </div>
+    </div>
+    <!-- ✨ DYNAMIC HERO CAPTION OVERLAY -->
+    <div class="hero-caption">
+        <div id="heroTitle" class="hero-caption-title">[NIKITA]</div>
+        <div id="heroSub" class="hero-caption-sub">MATRIX 1</div>
     </div>
 
     <!-- 🎞️ MAIN MOTION STREAM CONTAINER -->
