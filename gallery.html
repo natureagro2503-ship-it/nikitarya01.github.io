@@ -116,6 +116,31 @@
             letter-spacing: 2px;
             margin-top: 4px;
         }
+        /* 🔒 Click-to-Lock Card & HUD Badge */
+        .photo-module {
+            cursor: pointer;
+        }
+        .photo-module.is-locked {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.45);
+            transform: translateY(-10px);
+        }
+        .lock-badge {
+            display: none;
+            margin-top: 8px;
+            font-size: 0.7rem;
+            color: var(--bg-dark);
+            background: var(--accent-cyan);
+            padding: 3px 8px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+            pointer-events: auto;
+            width: fit-content;
+        }
+        .lock-badge.visible {
+            display: inline-block;
+        }
 
 
         
@@ -258,7 +283,9 @@
     <div class="hero-caption">
         <div id="heroTitle" class="hero-caption-title">[NIKITA]</div>
         <div id="heroSub" class="hero-caption-sub">MATRIX 1</div>
+        <div id="lockBadge" class="lock-badge" onclick="unlockGallery()">🔒 LOCKED — CLICK TO RESUME</div>
     </div>
+
 
     <!-- 🎞️ MAIN MOTION STREAM CONTAINER -->
     <div class="stage-view">
