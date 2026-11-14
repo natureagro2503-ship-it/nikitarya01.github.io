@@ -36,23 +36,24 @@
             overflow: hidden;
             pointer-events: none;
         }
-         .ambient-layer {
+          .ambient-layer {
             position: absolute;
-            inset: 120px 12px 235px 12px;
-/* Keeps the full photo framed cleanly between the top bar and bottom cards */
+            top: 135px;          /* Starts cleanly below the top bar & hero title */
+            left: 12px;
+            right: 12px;
+            bottom: 245px;       /* Stops cleanly above the bottom card strip */
             background-size: contain;
-            background-position: center;
+            background-position: center center;
             background-repeat: no-repeat;
-            filter: brightness(0.95) contrast(1.05);/*Brightness purpose for background*/
+            filter: brightness(0.95) contrast(1.05);
             opacity: 0;
-            transform: scale(1.04);
-            transition: opacity 1.2s ease-in-out, transform 6s ease-out;
+            transform: scale(1.03);
+            transition: opacity 0.8s ease-in-out, transform 5s ease-out;
         }
         .ambient-layer.active {
             opacity: 1;
             transform: scale(1);
         }
-
 
         .ambient-backdrop::after {
             content: "";
@@ -200,25 +201,45 @@
         }
 
         @media (min-width: 768px) {
+            .top-bar {
+                padding: 22px 40px;
+            }
+            .top-bar h2 {
+                font-size: 2.2rem;
+            }
+            .sys-mode, .hud-audio span {
+                font-size: 1rem !important;
+            }
+            .hero-caption {
+                top: 120px;
+                left: 40px;
+                padding: 16px 26px;
+            }
+            .hero-caption-title {
+                font-size: 2.2rem;
+            }
             .ambient-layer {
-               inset: 65px 20px 260px 20px; /* Wide framing for desktop monitors */
-            
+                top: 210px;      /* Clears the larger desktop header + title box */
+                left: 30px;
+                right: 30px;
+                bottom: 340px;   /* Clears the larger desktop card strip + bottom button */
             }
             .track-group {
-                gap: 35px;
-                padding: 0 17.5px;
+                gap: 30px;
+                padding: 0 15px;
             }
             .photo-module {
-                width: 240px;
-                height: 230px;
+                width: 220px;
+                height: 240px;
                 padding: 12px;
             }
             .photo-meta {
                 margin-top: 10px;
-                font-size: 0.8rem;
+                font-size: 0.95rem;
                 padding-top: 8px;
             }
         }
+
 
          .photo-meta {
             margin-top: 6px;
@@ -460,25 +481,29 @@
             let currentSrc = '';
             let useLayerA = true;
             let isLocked = false;
+            let currentTitle = '';
 
             function displayCardOnStage(card) {
                 const img = card.querySelector('img');
-                if (!img || img.src === currentSrc) return;
+                const titleEl = card.querySelector('.meta-title');
+                const coordEl = card.querySelector('.meta-coord');
+                const nextTitle = titleEl ? titleEl.textContent.trim() : '';
 
-                currentSrc = img.src;
+                if (!img || nextTitle === currentTitle) return;
+                currentTitle = nextTitle;
+
                 const incoming = useLayerA ? layerA : layerB;
                 const outgoing = useLayerA ? layerB : layerA;
 
-                incoming.style.backgroundImage = `url("${currentSrc}")`;
+                incoming.style.backgroundImage = `url("${img.src}")`;
                 incoming.classList.add('active');
                 outgoing.classList.remove('active');
                 useLayerA = !useLayerA;
 
-                const titleEl = card.querySelector('.meta-title');
-                const coordEl = card.querySelector('.meta-coord');
-                if (titleEl && heroTitle) heroTitle.textContent = titleEl.textContent;
-                if (coordEl && heroSub) heroSub.textContent = coordEl.textContent;
+                if (heroTitle) heroTitle.textContent = nextTitle;
+                if (heroSub && coordEl) heroSub.textContent = coordEl.textContent;
             }
+
 
             // Click any card to lock/unlock it on the main screen
             cards.forEach(card => {
