@@ -23,7 +23,8 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            height: 100vh;
+            height: 100vh;  /* Fallback for older browsers */
+            height: 100dvh; /* Exact visible height on mobile Chrome */
             display: flex;
             flex-direction: column;
         }
@@ -37,12 +38,12 @@
         }
          .ambient-layer {
             position: absolute;
-            inset: 70px 0 180px 0; 
+            inset: 120px 12px 235px 12px;
 /* Keeps the full photo framed cleanly between the top bar and bottom cards */
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
-            filter: brightness(0.9) contrast(1.05);/*Brightness purpose for background*/
+            filter: brightness(0.95) contrast(1.05);/*Brightness purpose for background*/
             opacity: 0;
             transform: scale(1.04);
             transition: opacity 1.2s ease-in-out, transform 6s ease-out;
@@ -81,14 +82,15 @@
         }
 
         /* 🎞️ Kinetic Conveyor Stage */
-        .stage-view {
+         .stage-view {
             flex: 1;
+            min-height: 0;
             position: relative;
             width: 100%;
-            overflow: hidden;
+            overflow: visible;
             display: flex;
-            align-items: flex-end; /* Keeps rotating cards anchored at the bottom */
-            padding-bottom: 20px;
+            align-items: flex-end;
+            padding-bottom: 12px;
             z-index: 2;
         }
 /* ✨ NEW: Dynamic Upper Hero Caption */
@@ -242,9 +244,11 @@
         }
 
         .control-dock {
-            background: rgba(4, 9, 18, 0.95);
+            flex-shrink: 0;
+            background: rgba(4, 9, 18, 0.9);
+            backdrop-filter: blur(8px);
             border-top: 1px solid rgba(20, 67, 123, 0.6);
-            padding: 20px;
+            padding: 12px 15px;
             text-align: center;
             z-index: 10;
         }
