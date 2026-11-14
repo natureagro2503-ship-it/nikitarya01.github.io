@@ -10,38 +10,72 @@
             --accent-cyan: #00ffcc;
             --accent-blue: #14437b;
             --text-light: #d2e6ff;
-            --panel-bg: rgba(6, 17, 33, 0.9);
+            --panel-bg: rgba(6, 17, 33, 0.92);
+        }
+        * {
+            box-sizing: border-box;
         }
         body {
             font-family: 'Courier New', Courier, monospace;
             background-color: var(--bg-dark);
             background-image: 
-                linear-gradient(rgba(20, 67, 123, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(20, 67, 123, 0.1) 1px, transparent 1px);
+                linear-gradient(rgba(20, 67, 123, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(20, 67, 123, 0.08) 1px, transparent 1px);
             background-size: 30px 30px;
             color: var(--text-light);
             margin: 0;
             padding: 0;
             overflow: hidden;
-            height: 100vh;  /* Fallback for older browsers */
-            height: 100dvh; /* Exact visible height on mobile Chrome */
+            height: 100vh;
+            height: 100dvh;
             display: flex;
             flex-direction: column;
         }
-/* 🌌 NEW: Ambient Dynamic Blurred Backdrop */
-        .ambient-backdrop {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            overflow: hidden;
-            pointer-events: none;
+
+        /* 1️⃣ TOP HEADER BAR */
+        .top-bar {
+            flex-shrink: 0;
+            background: rgba(4, 9, 18, 0.92);
+            border-bottom: 1px solid var(--accent-cyan);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
         }
-          .ambient-layer {
+        .top-bar h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            letter-spacing: 3px;
+            color: var(--accent-cyan);
+        }
+        .sys-mode {
+            font-size: 0.7rem;
+            color: #79a6db;
+        }
+        .hud-audio {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(20, 67, 123, 0.25);
+            border: 1px solid var(--accent-blue);
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        /* 2️⃣ DEDICATED UPPER HERO PHOTO STAGE */
+        .hero-stage {
+            flex: 1;
+            min-height: 0;
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .ambient-layer {
             position: absolute;
-            top: 135px;          /* Starts cleanly below the top bar & hero title */
-            left: 12px;
-            right: 12px;
-            bottom: 245px;       /* Stops cleanly above the bottom card strip */
+            inset: 12px;
             background-size: contain;
             background-position: center center;
             background-repeat: no-repeat;
@@ -55,85 +89,29 @@
             transform: scale(1);
         }
 
-        .ambient-backdrop::after {
-            content: "";
+        /* Dynamic Title Overlay inside Hero Stage */
+        .hero-caption {
             position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, rgba(3, 7, 13, 0.2) 0%, rgba(3, 7, 13, 0.75) 100%);
-        }
-
-        .top-bar {
-            background: rgba(4, 9, 18, 0.95);
-            border-bottom: 1px solid var(--accent-cyan);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
-        }
-        .top-bar h2 {
-            margin: 0;
-            font-size: 1.5rem;
-            letter-spacing: 4px;
-            color: var(--accent-cyan);
-        }
-        .sys-mode {
-            font-size: 0.75rem;
-            color: #79a6db;
-        }
-
-        /* 🎞️ Kinetic Conveyor Stage */
-         .stage-view {
-            flex: 1;
-            min-height: 0;
-            position: relative;
-            width: 100%;
-            overflow: visible;
-            display: flex;
-            align-items: flex-end;
-            padding-bottom: 12px;
-            z-index: 2;
-        }
-/* ✨ NEW: Dynamic Upper Hero Caption */
-         .hero-caption {
-            position: fixed;
-            top: 95px;
-            left: 35px;
+            top: 14px;
+            left: 16px;
             z-index: 5;
-            pointer-events: none;
-            background: rgba(4, 9, 18, 0.55);
+            background: rgba(4, 9, 18, 0.72);
             backdrop-filter: blur(6px);
             border-left: 3px solid var(--accent-cyan);
-            padding: 12px 20px;
-            transition: opacity 0.4s ease;
+            padding: 8px 14px;
+            pointer-events: none;
         }
         .hero-caption-title {
-            font-size: 1.6rem;
+            font-size: 1.15rem;
             font-weight: bold;
             color: #ffffff;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
-        }
-        .hero-caption-sub {
-            font-size: 0.8rem;
-            color: var(--accent-cyan);
             letter-spacing: 2px;
-            margin-top: 4px;
-        }
-        /* 🔒 Click-to-Lock Card & HUD Badge */
-        .photo-module {
-            cursor: pointer;
-        }
-        .photo-module.is-locked {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 25px rgba(0, 255, 204, 0.45);
-            transform: translateY(-10px);
+            text-transform: uppercase;
         }
         .lock-badge {
             display: none;
-            margin-top: 8px;
-            font-size: 0.7rem;
+            margin-top: 6px;
+            font-size: 0.65rem;
             color: var(--bg-dark);
             background: var(--accent-cyan);
             padding: 3px 8px;
@@ -147,50 +125,60 @@
             display: inline-block;
         }
 
-
-        
-        /* The container holding the two identical blocks side-by-side */
+        /* 3️⃣ STRICTLY BOTTOM-ANCHORED DOCK */
+        .bottom-dock {
+            flex-shrink: 0;
+            width: 100%;
+            background: rgba(4, 9, 18, 0.94);
+            border-top: 1px solid rgba(0, 255, 204, 0.35);
+            padding-top: 10px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+        }
+        .stage-view {
+            width: 100%;
+            overflow: hidden;
+            padding: 4px 0 10px 0;
+        }
         .conveyor-track {
             display: flex;
             width: max-content;
-            animation: matrixDrift 60s linear infinite; /* Adjust speed here */
+            animation: matrixDrift 50s linear infinite;
         }
         .conveyor-track:hover {
             animation-play-state: paused;
         }
-
-        /* Sub-groups inside the track to keep elements horizontally aligned */
         .track-group {
             display: flex;
-            gap: 25px;
-            padding: 0 12.5px;
+            gap: 14px;
+            padding: 0 7px;
         }
 
-         .photo-module {
-            width: 140px;
-            height: 165px;
+        /* Compact Clear Mobile Cards */
+        .photo-module {
+            width: 120px;
+            height: 145px;
             background: var(--panel-bg);
             border: 1px solid var(--accent-blue);
             border-radius: 2px;
-            padding: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            padding: 6px;
             display: flex;
             flex-direction: column;
-            box-sizing: border-box;
             cursor: pointer;
+            transition: transform 0.3s ease, border-color 0.3s ease;
         }
-
-        .photo-module:hover {
-            transform: scale(1.04) translateY(-10px);
+        .photo-module:hover,
+        .photo-module.is-locked {
             border-color: var(--accent-cyan);
+            box-shadow: 0 0 16px rgba(0, 255, 204, 0.4);
+            transform: translateY(-4px);
         }
         .image-container {
             width: 100%;
             flex: 1;
             min-height: 0;
             background: #040912;
-            border: 1px dashed rgba(20, 67, 123, 0.5);
             overflow: hidden;
         }
         .image-container img {
@@ -199,80 +187,26 @@
             object-fit: cover;
             display: block;
         }
-
-        @media (min-width: 768px) {
-            .top-bar {
-                padding: 22px 40px;
-            }
-            .top-bar h2 {
-                font-size: 2.2rem;
-            }
-            .sys-mode, .hud-audio span {
-                font-size: 1rem !important;
-            }
-            .hero-caption {
-                top: 120px;
-                left: 40px;
-                padding: 16px 26px;
-            }
-            .hero-caption-title {
-                font-size: 2.2rem;
-            }
-            .ambient-layer {
-                top: 210px;      /* Clears the larger desktop header + title box */
-                left: 30px;
-                right: 30px;
-                bottom: 340px;   /* Clears the larger desktop card strip + bottom button */
-            }
-            .track-group {
-                gap: 30px;
-                padding: 0 15px;
-            }
-            .photo-module {
-                width: 220px;
-                height: 240px;
-                padding: 12px;
-            }
-            .photo-meta {
-                margin-top: 10px;
-                font-size: 0.95rem;
-                padding-top: 8px;
-            }
-        }
-
-
-         .photo-meta {
-            margin-top: 6px;
+        .photo-meta {
+            margin-top: 5px;
             font-size: 0.65rem;
-            border-top: 1px solid rgba(20, 67, 123, 0.4);
-            padding-top: 5px;
+            color: #ffffff;
+            font-weight: bold;
+            text-align: center;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .meta-title {
-            color: #ffffff;
-            font-weight: bold;
-        }
-        .meta-coord {
-            color: #79a6db;
-        }
-
-        /* Perfect mathematical loop translation */
         @keyframes matrixDrift {
             0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-50%, 0, 0); } /* Moves exactly half the full track width */
+            100% { transform: translate3d(-50%, 0, 0); }
         }
 
         .control-dock {
-            flex-shrink: 0;
-            background: rgba(4, 9, 18, 0.9);
-            backdrop-filter: blur(8px);
-            border-top: 1px solid rgba(20, 67, 123, 0.6);
-            padding: 12px 15px;
+            border-top: 1px solid rgba(20, 67, 123, 0.5);
+            padding: 10px 15px;
             text-align: center;
-            z-index: 10;
         }
         .btn-link {
             display: inline-block;
@@ -280,192 +214,200 @@
             background-color: var(--accent-cyan);
             text-decoration: none;
             font-weight: bold;
-            padding: 12px 30px;
+            padding: 9px 22px;
             letter-spacing: 2px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
         }
 
-        .hud-audio {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(20, 67, 123, 0.2);
-            border: 1px solid var(--accent-blue);
-            padding: 6px 15px;
-            cursor: pointer;
+        /* 💻 DESKTOP SCALING (768px and wider) */
+        @media (min-width: 768px) {
+            .top-bar {
+                padding: 16px 35px;
+            }
+            .top-bar h2 {
+                font-size: 1.6rem;
+            }
+            .sys-mode, .hud-audio {
+                font-size: 0.85rem;
+            }
+            .ambient-layer {
+                inset: 20px 40px;
+            }
+            .hero-caption {
+                top: 24px;
+                left: 35px;
+                padding: 12px 20px;
+            }
+            .hero-caption-title {
+                font-size: 1.65rem;
+            }
+            .track-group {
+                gap: 24px;
+                padding: 0 12px;
+            }
+            .photo-module {
+                width: 185px;
+                height: 205px;
+                padding: 10px;
+            }
+            .photo-meta {
+                margin-top: 8px;
+                font-size: 0.85rem;
+            }
+            .btn-link {
+                padding: 11px 30px;
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
 <body>
-<!-- 🌌 NEW: AMBIENT BLURRED BACKGROUND LAYERS -->
-    
-        <div class="ambient-backdrop" aria-hidden="true">
-        <div id="ambientLayerA" class="ambient-layer active"></div>
-        <div id="ambientLayerB" class="ambient-layer"></div>
-    </div>
 
-        <div class="top-bar">
+    <div class="top-bar">
         <div>
             <h2>NIKITARYA</h2>
             <div class="sys-mode">Kinetic Matrix // Motion</div>
         </div>
-        
         <div class="hud-audio" onclick="toggleGalleryAudio()">
             <span id="audioHudIcon" style="color: var(--accent-cyan);">🔊</span>
-            <span id="audioHudStatus" style="font-size: 0.75rem; letter-spacing: 1px;">SYSTEM AUDIO ACTIVE</span>
+            <span id="audioHudStatus">AUDIO ACTIVE</span>
             <audio id="galleryAudio" src="music.mp3" loop autoplay></audio>
         </div>
     </div>
-    <!-- ✨ DYNAMIC HERO CAPTION OVERLAY -->
-    <div class="hero-caption">
-        <div id="heroTitle" class="hero-caption-title">[NIKITA]</div>
-        <div id="heroSub" class="hero-caption-sub">Arya</div>
-        <div id="lockBadge" class="lock-badge" onclick="unlockGallery()">🔒 LOCKED — CLICK TO RESUME</div>
+
+    <div class="hero-stage">
+        <div id="ambientLayerA" class="ambient-layer active"></div>
+        <div id="ambientLayerB" class="ambient-layer"></div>
+
+        <div class="hero-caption">
+            <div id="heroTitle" class="hero-caption-title">[NIKITA]</div>
+            <div id="lockBadge" class="lock-badge" onclick="unlockGallery()">🔒 LOCKED — CLICK TO RESUME</div>
+        </div>
     </div>
 
+    <div class="bottom-dock">
+        <div class="stage-view">
+            <div class="conveyor-track">
+                
+                <!-- GROUP A -->
+                <div class="track-group">
+                    <div class="photo-module">
+                        <div class="image-container"><img src="nikita.jpg" alt="Nikita"></div>
+                        <div class="photo-meta">[Nikita]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="arya.jpg" alt="Arya"></div>
+                        <div class="photo-meta">[Arya]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="nikitarya.png" alt="One"></div>
+                        <div class="photo-meta">[One]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="design.png" alt="Orthographic"></div>
+                        <div class="photo-meta">[Orthographic]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="80s.png" alt="In the 80s"></div>
+                        <div class="photo-meta">[In the 80s]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="structural.png" alt="Structural Engineer"></div>
+                        <div class="photo-meta">[Structural Engineer]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="northeasttribal.png" alt="Northeast Tribal"></div>
+                        <div class="photo-meta">[northeasttribal]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="don.jpg" alt="Don"></div>
+                        <div class="photo-meta">[don]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="love.jpg" alt="Love"></div>
+                        <div class="photo-meta">[Love]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="grid.png" alt="Grid look"></div>
+                        <div class="photo-meta">[Grid look]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="graduate.jpg" alt="Civil Engineer"></div>
+                        <div class="photo-meta">[Civil Engineer]</div>
+                    </div>
+                </div>
 
-    <!-- 🎞️ MAIN MOTION STREAM CONTAINER -->
-    <div class="stage-view">
-        <div class="conveyor-track">
-            
-            <!-- ================================================================= -->
-            <!-- 📦 GROUP A: ORIGINAL TRACK SET -->
-            <!-- ================================================================= -->
-                        <div class="track-group">
-                <div class="photo-module">
-                    <div class="image-container"><img src="nikita.jpg" alt="Photo 1"></div>
-                    <div class="photo-meta"><div class="meta-title">[Nikita]</div><div class="meta-coord"> </div></div>
+                <!-- GROUP B (MIRROR DUPLICATE) -->
+                <div class="track-group" aria-hidden="true">
+                    <div class="photo-module">
+                        <div class="image-container"><img src="nikita.jpg" alt="Nikita"></div>
+                        <div class="photo-meta">[Nikita]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="arya.jpg" alt="Arya"></div>
+                        <div class="photo-meta">[Arya]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="nikitarya.png" alt="One"></div>
+                        <div class="photo-meta">[One]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="design.png" alt="Orthographic"></div>
+                        <div class="photo-meta">[Orthographic]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="80s.png" alt="In the 80s"></div>
+                        <div class="photo-meta">[In the 80s]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="structural.png" alt="Structural Engineer"></div>
+                        <div class="photo-meta">[Structural Engineer]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="northeasttribal.png" alt="Northeast Tribal"></div>
+                        <div class="photo-meta">[northeasttribal]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="don.jpg" alt="Don"></div>
+                        <div class="photo-meta">[don]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="love.jpg" alt="Love"></div>
+                        <div class="photo-meta">[Love]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="grid.png" alt="Grid look"></div>
+                        <div class="photo-meta">[Grid look]</div>
+                    </div>
+                    <div class="photo-module">
+                        <div class="image-container"><img src="graduate.jpg" alt="Civil Engineer"></div>
+                        <div class="photo-meta">[Civil Engineer]</div>
+                    </div>
                 </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="arya.jpg" alt="Photo 2"></div>
-                    <div class="photo-meta"><div class="meta-title">[Arya]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="couple-photo.png" alt="Photo 3"></div>
-                    <div class="photo-meta"><div class="meta-title">[एकम्]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="design.png" alt="Photo 4"></div>
-                    <div class="photo-meta"><div class="meta-title">[orthographic]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="80s.png" alt="Photo 5"></div>
-                    <div class="photo-meta"><div class="meta-title">[in the 80s]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="structural.png" alt="Photo 6"></div>
-                    <div class="photo-meta"><div class="meta-title">[Structural Engineer]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="northeasttribal.png" alt="Photo 7"></div>
-                    <div class="photo-meta"><div class="meta-title">[northeasttribal]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="don.jpg" alt="Photo 8"></div>
-                    <div class="photo-meta"><div class="meta-title">[don]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="love.jpg" alt="Photo 9"></div>
-                    <div class="photo-meta"><div class="meta-title">[Love]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="grid.png" alt="Photo 10"></div>
-                    <div class="photo-meta"><div class="meta-title">[Grid look]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="graduate.jpg" alt="Photo 11"></div>
-                    <div class="photo-meta"><div class="meta-title">[Civil Engineer]</div><div class="meta-coord"> </div></div>
-                </div>
-            </div>
 
-            
-            <!-- ================================================================= -->
-            <!-- 📦 GROUP B: EXACT MIRROR DUPLICATE (Ensures No Glitching) -->
-            <!-- ================================================================= -->
-                        <div class="track-group" aria-hidden="true">
-                <div class="photo-module">
-                    <div class="image-container"><img src="nikita.jpg" alt="Photo 1"></div>
-                    <div class="photo-meta"><div class="meta-title">[Nikita]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="arya.jpg" alt="Photo 2"></div>
-                    <div class="photo-meta"><div class="meta-title">[Arya]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="nikitarya.png" alt="Photo 3"></div>
-                    <div class="photo-meta"><div class="meta-title">[One]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="design.png" alt="Photo 4"></div>
-                    <div class="photo-meta"><div class="meta-title">[Orthographic]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="80s.png" alt="Photo 5"></div>
-                    <div class="photo-meta"><div class="meta-title">[In the 80s]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="structural.png" alt="Photo 6"></div>
-                    <div class="photo-meta"><div class="meta-title">[Structural Engineer]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="northeasttribal.png" alt="Photo 7"></div>
-                    <div class="photo-meta"><div class="meta-title">[northeasttribal]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="don.jpg" alt="Photo 8"></div>
-                    <div class="photo-meta"><div class="meta-title">[don]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="love.jpg" alt="Photo 9"></div>
-                    <div class="photo-meta"><div class="meta-title">[Love]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="grid.png" alt="Photo 10"></div>
-                    <div class="photo-meta"><div class="meta-title">[Grid look]</div><div class="meta-coord"> </div></div>
-                </div>
-                <div class="photo-module">
-                    <div class="image-container"><img src="graduate.jpg" alt="Photo 11"></div>
-                    <div class="photo-meta"><div class="meta-title">[Civil Engineer]</div><div class="meta-coord"> </div></div>
-                </div>
             </div>
-   
-                     <!-- Bottom Navigation Dock (Command Matrix Link) -->
-    <div class="control-dock">
-        <a href="index.html" class="btn-link">➔ Return to Command Matrix</a>
+        </div>
+
+        <div class="control-dock">
+            <a href="index.html" class="btn-link">Return to Main Terminal</a>
+        </div>
     </div>
 
     <!-- Audio Engine Initialization & Interactive Controls -->
     <script>
-        // Attempts to safely bypass browser autoplay barriers upon document loading
-        window.addEventListener('DOMContentLoaded', (event) => {
-            var audio = document.getElementById('galleryAudio');
-            if (audio) {
-                audio.volume = 0.70; // Sets baseline system volume to 70%
-                audio.play().catch(function(err) {
-                    console.log("System Autoplay blocked. User input signature required.");
-                    document.getElementById('audioHudStatus').textContent = "CLICK TO INITIALIZE AUDIO";
-                    document.getElementById('audioHudIcon').textContent = "🔇";
-                });
-            }
-        });
-
-        // Toggles audio streaming states between play and pause
         function toggleGalleryAudio() {
-            var audio = document.getElementById('galleryAudio');
-            var status = document.getElementById('audioHudStatus');
-            var icon = document.getElementById('audioHudIcon');
-            
-            if (audio) {
-                if (audio.paused) {
-                    audio.play();
-                    status.textContent = "SYSTEM AUDIO ACTIVE";
-                    icon.textContent = "🔊";
-                } else {
-                    audio.pause();
-                    status.textContent = "AUDIO MUTED";
-                    icon.textContent = "🔇";
-                }
+            const audio = document.getElementById('galleryAudio');
+            const icon = document.getElementById('audioHudIcon');
+            const status = document.getElementById('audioHudStatus');
+            if (audio.paused) {
+                audio.play();
+                icon.textContent = '🔊';
+                status.textContent = 'AUDIO ACTIVE';
+            } else {
+                audio.pause();
+                icon.textContent = '🔇';
+                status.textContent = 'AUDIO MUTED';
             }
         }
 
@@ -473,20 +415,17 @@
             const layerA = document.getElementById('ambientLayerA');
             const layerB = document.getElementById('ambientLayerB');
             const heroTitle = document.getElementById('heroTitle');
-            const heroSub = document.getElementById('heroSub');
             const lockBadge = document.getElementById('lockBadge');
             const track = document.querySelector('.conveyor-track');
             const cards = document.querySelectorAll('.photo-module');
 
-            let currentSrc = '';
+            let currentTitle = '';
             let useLayerA = true;
             let isLocked = false;
-            let currentTitle = '';
 
             function displayCardOnStage(card) {
                 const img = card.querySelector('img');
-                const titleEl = card.querySelector('.meta-title');
-                const coordEl = card.querySelector('.meta-coord');
+                const titleEl = card.querySelector('.photo-meta');
                 const nextTitle = titleEl ? titleEl.textContent.trim() : '';
 
                 if (!img || nextTitle === currentTitle) return;
@@ -501,11 +440,8 @@
                 useLayerA = !useLayerA;
 
                 if (heroTitle) heroTitle.textContent = nextTitle;
-                if (heroSub && coordEl) heroSub.textContent = coordEl.textContent;
             }
 
-
-            // Click any card to lock/unlock it on the main screen
             cards.forEach(card => {
                 card.addEventListener('click', () => {
                     const alreadyLocked = card.classList.contains('is-locked');
@@ -559,4 +495,5 @@
     </script>
 </body>
 </html>
+
    
